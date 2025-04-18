@@ -57,6 +57,13 @@ threshold <- 0.05  # 5% threshold for rarity
 TidalCompositionThreshold <- TidalRelComposition %>%
   mutate(ScientificName_Modified = ifelse(RelAbundance < threshold, "Other", ScientificName))
 
+species <- unique(TidalCompositionThreshold$ScientificName_Modified)
+species
+
+nb.cols <- 16
+mycolors <- colorRampPalette(brewer.pal(12, "Set3"))(nb.cols)
+
+
 # Step 3: Plot with "Other" combined
 ggplot(TidalCompositionThreshold, aes(x = Basin, y = RelAbundance, fill = ScientificName_Modified)) +
   geom_bar(stat = "identity") +
@@ -67,6 +74,6 @@ ggplot(TidalCompositionThreshold, aes(x = Basin, y = RelAbundance, fill = Scient
   theme(
     axis.text.x = element_text(angle = 45, hjust = 1),
     legend.position = "right"
-  )
+  ) + scale_fill_manual(values = setNames(mycolors[1:length(species)], species))
 
 
